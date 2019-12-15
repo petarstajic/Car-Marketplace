@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Projekat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+  		<div class="container-fluid">
+   			 <ul class="nav navbar-nav">
+      	  	    <li><a href="/home">Pocetna</a></li>
+      	  	    <li><a href="/cars">Pretraga</a></li>
+      	  	    <li><a href="/cars/forms/add">Dodaj vozilo</a></li>
+       	   		<li><a href="/change">Izmeni cenu</a></li>
+      		 </ul>
+			</div>
+		</nav>
+    </nav>
+
+
+
+<div class="container">
+<div class="well well-lg">
+  <h3>Izmeni cenu automobila</h3>
+  <br>
+  <br>
+  <label>Unesite id automobila za izmenu:</label>
+  <form class="form-inline">
+  <div class="form-group">
+  <input class="form-control" type="text" id="id">
+  </div>
+  </form>
+  
+  {{#if cars}}
+		<h3>Automobili</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each cars}}
+					<tr>
+						<td><select><option value="{{this.id}}" onchange="ispisiPodatke(this)"></td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	{{/if}}
+  
+  <div id="ispis">
+  
+  </div>
+  </div>
+  </div>
+  
+  <script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+  
+  <script>
+  	let divIspis = document.querySelector("#ispis");
+  	function ispisiPodatke(element){
+  		podaci = {
+  			"id":document.querySelector("#id").value
+  		}
+  		
+  		
+  		$.ajax(
+  			{
+  			url:"/api/ispis/",
+  			method:"POST",
+  			data:podaci,
+  			success:function(response){
+  				let auto = JSON.parse(response);
+  				let html = `
+  					<form class="form-group" action="/forma/change" method="POST">
+				      <div class="form-group">
+				        <input type="text" class="form-control invisible" id="id1" name="id" value="${auto.id}" readonly>
+				      </div>
+				      <div class="form-group">
+				        <label>Marka:${auto.brend}</label><br>
+				        <label>Model:${auto.model}</label>
+				      </div>
+				      <label>Nova cena:</label>
+				      <div class="form-inline">
+				      
+				      <div class="form-group">
+				        
+				        <input type="text" class="form-control" id="cena1" value="${auto.cena}" name="cena">
+				      </div>
+				      <button type="submit" class="btn btn-primary">Posalji</button>
+				    </form>
+				    </form>
+  				`;	
+			divIspis.innerHTML = html;
+  			}
+  			
+  		}
+  		
+  		)
+  	}
+  </script>
+	
+	
+</body>
+</html>

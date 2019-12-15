@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Projekat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+  		<div class="container-fluid">
+   			 <ul class="nav navbar-nav">
+      	  	    <li><a href="/home">Pocetna</a></li>
+      	  	    <li><a href="/cars">Pretraga</a></li>
+      	  	    <li><a href="/cars/forms/add">Dodaj vozilo</a></li>
+       	   		<li><a href="/change">Izmeni cenu</a></li>
+      		 </ul>
+			</div>
+		</nav>
+    </nav>
+    
+    
+    
+    <div class="container">
+    <div class="well well-lg">
+    <h3>Pretraga automobila</h3>
+    <p>Unesite godiste automobila</p>
+    <form class="form-inline">
+    <div class="form-group">
+    	
+    	<input class="form-control" id="godineOd">do
+    	<input class="form-control" id="godineDo">
+    </div>
+    	<button type="button" class="btn btn-primary" onclick="pretrazi()">Filtriraj</button>
+    </form>
+ 
+      <div class="radio">
+      	<label><input type="radio" name="sort" value="asc" onchange="sort(this)">Rastuce</label>
+  		<label><input type="radio" name="sort" value="desc" onchange="sort(this)">Opadajuce</label>
+ 	</div>
+
+    
+    
+   {{#if cars}}
+		<h3>Automobili</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Marka</th>
+					<th>Model</th>
+					<th>Godiste</th>
+					<th>Cena</th>
+				</tr>
+			</thead>
+			<tbody id="content">
+				
+			</tbody>
+		</table>
+	{{/if}}
+	
+</div>
+</div>
+	
+	<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+   
+	
+	
+	<script>
+     	let godineOd=document.querySelector("#godineOd");
+     	let godineDo=document.querySelector("#godineDo");
+     	let content=document.querySelector("#content");
+     	
+     	
+     	function pretrazi(){
+     		let podaci={
+     			"godineOd":godineOd.value,
+     			"godineDo":godineDo.value
+     		}
+     		$.ajax(
+     			{
+     				url:"/api/search",
+     				method:"GET",
+     				data:podaci,
+     				success:function(response){
+     					let automobili=JSON.parse(response);
+     					content.innerHTML="";
+     					for(let automobil of automobili){
+     						content.innerHTML+=`
+     							<tr>
+     								<td>${automobil.id}</td>
+									<td>${automobil.brend}</td>
+									<td>${automobil.model}</td>
+									<td>${automobil.godiste}</td>
+									<td>${automobil.cena}</td>
+								</tr>
+							
+     						`;
+     					}
+     					
+     				}
+     			}
+     		)
+     	}
+     	
+     	function sort(element){
+  		let podaci = {
+  			"sort":element.getAttribute("value"),
+  			"godineOd":godineOd.value,
+     		"godineDo":godineDo.value
+  		}
+  		$.ajax(
+  			{
+  				url:"/api/search/sort",
+  				method:"POST",
+  				data:podaci,
+  				success:function(response){
+  					let automobili=JSON.parse(response);
+     					content.innerHTML="";
+     					for(let automobil of automobili){
+     						content.innerHTML+=`
+     							<tr>
+     								<td>${automobil.id}</td>
+									<td>${automobil.brend}</td>
+									<td>${automobil.model}</td>
+									<td>${automobil.godiste}</td>
+									<td>${automobil.cena}</td>
+								</tr>
+							
+     						`;
+     					}
+  				}
+  			}
+  		)
+  	}
+     	
+     	
+     </script>
+</body>
+</html>

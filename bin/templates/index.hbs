@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Projekat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+  		<div class="container-fluid">
+   			 <ul class="nav navbar-nav">
+      	  	    <li><a href="/home">Pocetna</a></li>
+      	  	    <li><a href="/cars">Pretraga</a></li>
+      	  	    <li><a href="/cars/forms/add">Dodaj vozilo</a></li>
+       	   		<li><a href="/change">Izmeni cenu</a></li>
+      		 </ul>
+			</div>
+		</nav>
+    </nav>
+       
+    
+     
+    <div class="container">
+    <div class="well well-lg">
+   
+    
+	{{#if cars}}
+		<h3>Automobili</h3>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Marka</th>
+					<th>Model</th>
+					<th>Godiste</th>
+					<th>Cena</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#each cars}}
+					<tr>
+						<td>{{this.id}}</td>
+						<td>{{this.brend}}</td>
+						<td>{{this.model}}</td>
+						<td>{{this.godiste}}</td>
+						<td>{{this.cena}}</td>
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	{{/if}}
+	</div>
+	</div>
+	
+</body>
+</html>
